@@ -1,0 +1,16 @@
+{
+  "name": "full-backend",
+  "version": "1.0.0",
+  "description": "Backend prep",
+  "keywords": [
+    "JS",
+    "Backend"
+  ],
+  "license": "ISC",
+  "author": "Shilpa Rana",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
