@@ -22,4 +22,13 @@ app.use(express.static('public')); // Serve static files from the 'public' direc
 
 app.use(cookieParser()); // Middleware to parse cookies from incoming requests
 
+//Routes import
+import userRouter from "./routes/user.routes.js";
+
+
+//routes declaration
+app.use("/api/v1/users", userRouter);
+// http://localhost:8000/api/v1/users/register - this will be the endpoint for user registration, and it will be handled by the userRouter which is imported from the user.routes.js file. The userRouter will define the specific routes and handlers for user-related operations, such as registration, login, etc.
+
+
 export default app;
