@@ -143,7 +143,7 @@ return res
     .status(200)
     .clearCookie("accessToken", options) // Clear access token cookie
     .clearCookie("refreshToken", options) // Clear refresh token cookie
-    .json(new ApiResponse(200, null, "User logged out successfully"));
+    .json(new ApiResponse(200, "User logged out successfully"));
 })
 
 
