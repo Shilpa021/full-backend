@@ -36,7 +36,7 @@ userSchema.methods.isPasswordCorrect = async function(plainPassword){
 
 userSchema.methods.generateAccessToken = function(){
     return jsonwebToken.sign( //sign generates token, we pass the payload which is an object containing userId and username, then we pass the secret key which is stored in environment variable, and then we pass the options which is the expiry time of the token
-        {  userId: this._id,  // _id is the default field created by mongoose for each document, it is a unique identifier for each document, we can use it to identify the user in the database
+        {  _id: this._id,  // _id is the default field created by mongoose for each document, it is a unique identifier for each document, we can use it to identify the user in the database
             username: this.username,
             email: this.email, 
             fullName: this.fullName
@@ -51,10 +51,8 @@ userSchema.methods.generateAccessToken = function(){
 userSchema.methods.generateRefreshToken = function(){
     return jsonwebToken.sign( //sign generates token, we pass the payload which is an object containing userId and username, then we pass the secret key which is stored in environment variable, and then we pass the options which is the expiry time of the token
         {
-            userId: this._id,  // _id is the default field created by mongoose for each document, it is a unique identifier for each document, we can use it to identify the user in the database
-            username: this.username,
-            email: this.email, 
-            fullName: this.fullName
+            _id: this._id,  // _id is the default field created by mongoose for each document, it is a unique identifier for each document, we can use it to identify the user in the database
+            
             },
         process.env.REFRESH_TOKEN_SECRET,
         {
