@@ -18,16 +18,20 @@ const userSchema = new Schema({
     refreshToken: {type: String},
 }, {timestamps: true});
 
-userSchema.pre("save", async function(next){ // can't use arrow function since we do not access to this keyword in arrow function, we need to use regular function to access this keyword which will point to the document being saved
-    if(!this.isModified("password")){ // isModified we get this from mongoose, it checks if the password field is modified or not, if not modified then we do not need to hash the password again, we can just move to next middleware
-        return next();
+// Use the async style pre-save hook without the `next` parameter. When the
+// hook function returns a promise (async), Mongoose will wait for it — this
+// avoids cases where `next` isn't passed and `next is not a function` is thrown.
+userSchema.pre("save", async function() {
+    // can't use arrow function since we need `this` to point to the document
+    if (!this.isModified("password")) {
+        return;
     }
     this.password = await bcrypt.hash(this.password, 10);
-    next()
-}) 
+});
 
 userSchema.methods.isPasswordCorrect = async function(plainPassword){
-    return await bcrypt.compare(password, this.password);
+    // Use the provided plainPassword variable (was referencing undefined `password`)
+    return await bcrypt.compare(plainPassword, this.password);
 }
 
 userSchema.methods.generateAccessToken = function(){
