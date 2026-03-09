@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 
 const generateAccessAndRefreshTokens = async (userId) => {
@@ -220,7 +221,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     const { fullName, email } = req.body;
 
     // Validate the input
-    if (!fullName || !email) {
+    if (!(fullName || email)) {
         throw new ApiError(400, "Full name and email are required");
     }
 
@@ -231,7 +232,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     if (!user) {
         throw new ApiError(404, "User not found");
     }
-
+    console.log("Updated user details:", user);
     return res
         .status(200)
         .json(new ApiResponse(200, user, "Account details updated successfully"));
@@ -360,10 +361,12 @@ const getWatchHistory = asyncHandler(async (req, res) => {
                                 $project: { // exclude the password and refreshToken fields from the owner document since we don't need them in the watch history response
                                     fullName: 1,
                                     username: 1,
+                                    avatar: 1,
                                 }
                             }],
 
                     },
+                }, {
                     $addFields: { // add a new field owner to the videos document which will contain the details of the owner of the video
                         owner: { $first: "$owner" }
                     }
@@ -376,9 +379,9 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .json(new ApiResponse(
-            200, 
-            user[0].watchHistory, 
-            "Watch history retrieved successfully"));      
+            200,
+            user[0].watchHistory,
+            "Watch history retrieved successfully"));
 })
 
 
